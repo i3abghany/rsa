@@ -25,6 +25,8 @@ class RSAEncryptor:
         self._d = pow(self._e, -1, self._mod)
 
     def encrypt(self, m: int):
+        if m >= self._n:
+            raise RuntimeError('Encoded message larger than internally-generated mod.')
         return pow(m, self._e, self._n)
 
     def decrypt(self, m_prime: int):
