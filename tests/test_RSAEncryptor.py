@@ -19,3 +19,9 @@ class TestRSAEncryptor(TestCase):
         enc = rsa.encrypt(m)
         dec = rsa.decrypt(enc)
         self.assertEqual(m, dec)
+
+    def test_encrypt_message_larger_than_mod(self):
+        rsa = RSAEncryptor()
+        mod = rsa._n
+        m = mod + 1
+        self.assertRaises(RuntimeError, lambda: rsa.encrypt(m))
