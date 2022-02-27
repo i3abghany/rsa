@@ -19,10 +19,10 @@ class RSAEncryptor:
     def _gen_keys(self):
         self._p = number.getPrime(self.prime_length)
         self._q = number.getPrime(self.prime_length)
-        self._mod = (self._p - 1) * (self._q - 1)
-        self._n = self._p * self._q
+        self._totient = (self._p - 1) * (self._q - 1)
+        self._mod = self._p * self._q
         self._e = self.DEFAULT_PUBLIC_EXPONENT
-        self._d = pow(self._e, -1, self._mod)
+        self._d = pow(self._e, -1, self._totient)
 
     def encrypt(self, m: int):
         # In RSA, the encoded message must be less than the calculated product of `p` and `q`.
@@ -32,9 +32,9 @@ class RSAEncryptor:
         # exchange keys for another symmetric cypher such as AES, and use it from there.
         # Since AES keys are usually 256 bits at most, we won't suffer from larger-than-mod
         # message issues.
-        if m >= self._n:
+        if m >= self._mod:
             raise RuntimeError('Encoded message larger than internally-generated mod.')
-        return pow(m, self._e, self._n)
+        return pow(m, self._e, self._mod)
 
     def decrypt(self, m_prime: int):
-        return pow(m_prime, self._d, self._n)
+        return pow(m_prime, self._d, self._mod)

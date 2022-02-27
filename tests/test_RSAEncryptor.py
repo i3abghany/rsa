@@ -22,6 +22,6 @@ class TestRSAEncryptor(TestCase):
 
     def test_encrypt_message_larger_than_mod(self):
         rsa = RSAEncryptor()
-        mod = rsa._n
+        mod = rsa._mod
         m = mod + 1
         self.assertRaises(RuntimeError, lambda: rsa.encrypt(m))
