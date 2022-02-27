@@ -1,5 +1,12 @@
 
-from Cryptodome.Util import number
+try:
+    from Cryptodome.Util import number
+except ModuleNotFoundError:
+    import pip
+
+    pip.main(['install', 'pycryptodomex'])
+finally:
+    from Cryptodome.Util import number
 
 
 class RSAEncryptor:
