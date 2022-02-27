@@ -25,6 +25,13 @@ class RSAEncryptor:
         self._d = pow(self._e, -1, self._mod)
 
     def encrypt(self, m: int):
+        # In RSA, the encoded message must be less than the calculated product of `p` and `q`.
+        # The way we encode messages is problematic since the numeric message can increase
+        # very quickly. We could divide the message into multiple parts, encode and encrypt
+        # them transparently from the user. However, RSA is usually only used to securely
+        # exchange keys for another symmetric cypher such as AES, and use it from there.
+        # Since AES keys are usually 256 bits at most, we won't suffer from larger-than-mod
+        # message issues.
         if m >= self._n:
             raise RuntimeError('Encoded message larger than internally-generated mod.')
         return pow(m, self._e, self._n)
